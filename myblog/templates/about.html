@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>About</title>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<link rel="stylesheet" href="static/css/aboutstyle.css">
+    	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> 
+    	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<header>
+			<ul class="main-nav">
+				<li><a href="{{ url_for('index') }}">Home</a></li>
+				<li><a href="{{ url_for('about') }}">About</a></li>
+				<li><a href="{{ url_for('contact') }}">Contact</a></li>
+			</ul>
+			<div class="dropdown">
+                <img src="static/images/userfoto.png" alt="userfoto"  width="40px" height="40px" /><nobr style="color: white"> {{  global_username }} </nobr>
+            	<ul class="drop-nav">
+                	<li><a href="{{ url_for('info') }}">Edit Account</a></li>
+                	<li><a href="{{ url_for('gitstatus')}}">Github Status</a></li>  
+                	<li><a href="{{ url_for('login') }}">Log In</a></li>
+                	<li><a href="{{ url_for('register') }}">Sign Up</a></li>
+                	<li><a  href="{{ url_for('logout') }}">Logout</a></li>
+            	</ul>
+        	</div>
+		  </header>
+<!--Parte Sinistra della pagina-->
+		<div id="sinistra">
+		<h1>OSTAP<br>FEDCHUK</h1>
+		<h2>ITS STUDENTE</h2>
+		<br><hr class="linea"><br>
+			<div>
+				<h2>ISTRUZIONE E FORMAZIONE</h2>
+				<p><b>Istituto Tecnico Leonardo Da Vinci Borgomanero</b></p>
+				<p>Diploma in Informatica 2025/2026</p>
+				<h2>ESPERIENZE PROFESSIONALI</h2>
+				<p><b>Studi ITS Borgomanero (2020-2026)</b></p>
+				<p>Ho eseguito gli studi di Informatica per ITS di Leonardo<br> 
+				da Vinci a Borgomanero(NO), I primi due anni sono stati "formativo"<br> 
+				verso il vero studio di informatica per dare un'idea sulla facolta e<br> 
+				nel caso in cui non si è appassionati poter cambiare la via. Nel giro<br> 
+				dei due anni abbiamo studiato tante materie un po' inutili per la facolta<br> 
+				frequentata, di scienze applicate di informatica abbiamo fatto Word,Exel<br>
+				e alla fine del secondo un po' di HTML e CSS.Al triennio invece abbiamo<br>
+				trattato gli argomenti come linguaggi di programmazione(<a href="https://it.wikipedia.org/wiki/C_(linguaggio)">C</a>,<a href="https://docs.oracle.com/en/java/">Java</a>,<a href="https://en.wikipedia.org/wiki/X86_assembly_language">x86 Assembly</a>,<br>
+				<a href="https://www.php.net/">PHP</a>,<a href="https://developer.mozilla.org/en-US/docs/Web/javascript">Javascript</a>),linguaggi di Markup e di Styling(<a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a>,<a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a>) e il Database(<a href="https://www.mysql.com/">MySQL</a>).<br>
+				Questi 5 anni sono stati neccessari per entrare e capire come funziona il<br>
+				mondo di lavoro o poter proseguire i studi andando a prendersi una laurea.<br>
+				</p>
+				<p><b>Stage EID S.r.l Borgomanero (2023)</b></p>
+				<p>Alla fine del 3° anno delle superiore di informatica dal<br> 
+				12 giugno fino al 21 di luglio ero stato accolto nell'azienda<br> 
+				EID S.r.l come stagista(PCTO) essendo che nel giro dei 3 anni<br> 
+				si devono raggiungere minimo 150 ore di lavoro. Sono stato accolto<br>
+				da un tutor di nome Marco che mi ha aiutato in questo percorso<br> 
+				completamente nuovo per me. All'inizio ho creato un Curriculum,<br>
+				sottoforma di un sito utilizzando <a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a> e <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a>.Dopo ho aggiunto<br>
+				<a href="https://developer.mozilla.org/en-US/docs/Web/javascript">Javascript</a> e il suo framework <a href="https://vuejs.org/guide/introduction.html">Vue.js</a>,<a href="https://getbootstrap.com/docs/5.0/getting-started/introduction/">Bootstrap(CSS)</a>,come il<br> 
+				<a href="https://it.wikipedia.org/wiki/Framework">framework</a> per il Back-End ho utilizzato <a href="https://flask.palletsprojects.com/en/2.3.x/">Flask</a> e per la gestione<br>
+				dei dati emmessi dall'utente durante la registrazione al mio sito,<a href="https://www.sqlite.org/docs.html">SQLite</a>.<br> 
+				</p>
+				<h2>LINGUE</h2>
+				<p>Italiano-C1 | Ucraino-Madrelingua | Inglese-A2</p>
+			</div>
+		</div>
+<!--Parte Destra della pagina-->
+		<div id="destra">
+			<img src="static/images/fotome (2).jpg" alt="foto" id="foto">
+			<h2>CHI SONO</h2>
+			<p>Mi chiamo Ostap, ho 17 anni,
+				abito a Borgomanero e sono
+				appassionato di Informatica.
+				Sono creativo, innovativo,
+				impressionante e sempre
+				pronto alle avventure.
+			</p>
+			<br>
+			<h2>COMPETENZE</h2>
+			<ul>
+				<li>Front-End Developer</li>
+				<li>Back-End Developer</li>
+				<li>Software Developer</li>
+			</ul>
+			<br>
+			<h2>REFERENZE</h2>
+			<p id="p-ref">Disponibile su richiesta</p>
+			<br>
+		</div>
+		<footer>
+			<ul id="ulfooter">
+                <li><a href="https://github.com/OstapFedchuk"><img src="static/icons/github.png" alt="github" class="iconefoot" id="github"></a></li>
+                <li><a href="https://github.com/OstapFedchuk"><img src="static/icons/facebook.png" alt="facebook" class="iconefoot" id="facebook"></a></li>
+				<li><a href="https://github.com/OstapFedchuk"><img src="static/icons/youtube.png" alt="youtube" class="iconefoot" id="youtube"></a></li>
+                <li><a href="https://github.com/OstapFedchuk"><img src="static/icons/linkedin.png" alt="linkedin" class="iconefoot" id="linkedin"></a></li>
+				<li><a href="https://github.com/OstapFedchuk"><img src="static/icons/twitter.png" alt="twitter" class="iconefoot" id="twitter"></a></li>
+            </ul>
+		</footer>
+	</body>
+</html>

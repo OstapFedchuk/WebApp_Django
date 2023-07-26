@@ -1,0 +1,76 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #ecf0f1;
+}
+
+label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+header .home-header {
+    position: relative;
+    font-size: 25px;
+    left: 2%;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header .login-header {
+    position: relative;
+    left: 85%;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header a {
+    color: black;
+    text-decoration: none;
+}
+
+header a:hover {
+    color:#2c3e50;
+    text-decoration: underline;
+    text-decoration-color: black;
+}
+
+#github-link {
+    position: relative;
+    margin-top: 10%;
+    margin-left: 40%;
+}
+
+#github-link a {
+    font-size: 25px;
+    font-weight: bold;
+    text-decoration-color: black;
+    color: black;
+}
+
+#github-link a:hover {
+    color: green;
+}
+
+#main-calendar {
+    margin-top: 10%;
+}
+
+.calendar {
+    position: relative;
+    border: 1px solid black;
+    width: 55%;
+}
+
+footer {
+    border: 2px solid #2c3e50;
+    background-color: #2c3e50;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    padding-top: 1%;
+}

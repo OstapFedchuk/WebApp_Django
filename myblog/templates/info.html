@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/infostyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> 
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVageTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+    <title>{{ global_username }} Info</title>
+</head>
+<body>
+    {% block content %}
+    <header>
+        <a class="home-header" href="{{ url_for('index') }}">< HOME</a>
+        <a class="github-header" href="{{ url_for('gitstatus') }}">GITHUB STATUS ></a>
+    </header>
+    <div class="container py-4">
+       <div class="contact">
+            <h2><b>EDIT ACCOUNT</b></h2>
+       </div>
+        <form id="contactForm" method="POST" action="{{ url_for('info') }}" class="form-horizontal">
+            <!--User's Username-->
+            <div class="row mb-3">
+                <label for="FormUsername" class="col-sm-2 col-form-label">Username:</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="FormUsername" name="FormUsername"  value="{{ global_username }}" disabled>
+                </div>
+              </div>
+            <!--User's Email-->
+            <div class="row mb-3">
+              <label for="FormEmail" class="col-sm-2 col-form-label">Email: <nobr></nobr></label>
+              <div class="col-sm-4">
+                <input type="email" class="form-control" id="FormEmail" name="FormEmail" value="{{ global_email }}">
+                <br>
+                {% if error_exist %}
+                  <p style="color: red"><b>Email is already taken!</b></p>
+                {% endif %}
+                <button type="submit" class="btn btn-primary" name="action" value="first-one" id="verify-pass">Change Email</button>
+                {% if success_email %}
+                    <nobr style="color: green; margin-left: 5%;" id="success_email"><b>Email Changed!</b></nobr>
+                {% endif %}
+              </div>
+            </div>
+            <!--User's FullName-->
+            <div class="row mb-3">
+                <label for="fullname" class="col-sm-2 col-form-label">Fullname: <nobr></nobr></label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="fullname" name="fullname"  value="{{ global_fullname }}">
+                </div>
+              </div>
+            <!--User's Age-->
+            <div class="row mb-3">
+                <label for="age" class="col-sm-2 col-form-label">Age: <nobr></nobr></label>
+                <div class="col-sm-4">
+                  <input type="date" class="form-control" id="age" name="age"  value="{{ global_age }}">
+                </div>
+              </div>
+            <!--User's Gender-->
+            <div class="row mb-3">
+                <label for="gender" class="col-sm-2 col-form-label">Gender: <nobr></nobr></label>
+                <div class="col-sm-4">
+                    <select class="form-select" aria-label="Default select example" name="gender" value="{{ global_gender }}">
+                        <option value="Male" {% if global_gender == 'Male' %} selected {% endif %}>Male</option>
+                        <option value="Female" {% if global_gender == 'Female' %} selected {% endif %}>Female</option>
+                        <option value="Unspecified" {% if global_gender == 'Unspecified' %} selected {% endif %}>Unspecified</option>
+                    </select>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" name="action" value="one">Commit Changes</button>
+              {% if success %}
+                    <nobr style="color: green; margin-left: 5%;" id="success"><b> Changes made successfully</b></nobr>
+                {% endif %}
+              <br><br>
+            <!--User's Password Actual Password-->
+            <div class="row mb-3">
+                <label for="YourPassword" class="col-sm-2 col-form-label">Password: <nobr></nobr></label>
+                <div class="col-sm-4">
+                  <input type="password" class="form-control" id="YourPassword" name="YourPassword" placeholder="Insert your password" {% if global_checkpwd == True %} disabled {% endif %}>
+                  <br>
+                  {% if error_match1 %}
+                    <p style="color: red"><b>Password don't match</b></p>
+                  {% endif %}
+                  <button type="submit" class="btn btn-primary" name="action" value="two" id="verify-pass">Verify Password</button>
+                </div>
+              </div>
+            <!--User's New Password-->
+            <div class="row mb-3">
+                <label for="NewPassword" class="col-sm-2 col-form-label">New Password:</label>
+                <div class="col-sm-4">
+                  <input type="password" class="form-control" id="NewPassword" name="NewPassword" placeholder="Insert a new password" value="" {% if global_checkpwd == False %} disabled {% endif %}>
+                </div>
+              </div>
+            <!--Confirm the new User's password-->
+            <div class="row mb-3">
+                <label for="ConfirmNewPassword" class="col-sm-2 col-form-label">Confirm New Password:</label>
+                <div class="col-sm-4">
+                  <input type="password" class="form-control" id="ConfirmNewPassword" name="ConfirmNewPassword" placeholder="Insert to confirm the new password" value="" {% if global_checkpwd == False %} disabled {% endif %}>
+                </div>
+              </div>
+                {% if error_match %}
+                    <p style="color: red"><b>Passwords don't match</b></p>
+                {% endif %}
+                {% if requirements %}
+                <p style="color: red"><b>Minimal requirements(Min. Lenght=8, 1 Digit, 1 Upercase, 1 Lowercase, 1 Special Character)</b></p>
+                {% endif %}
+              <button type="submit" class="btn btn-primary" name="action" value="three">Change Password</button>
+        </form>
+    </div>
+    
+    <footer>
+        <p style="text-align: center; font-family: Arial, Helvetica, sans-serif;"><b>2023 Copyright© Ostap Fedchuk</b></p>
+    </footer>
+    {% endblock %}
+</body>
+</html>
