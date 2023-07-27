@@ -1,10 +1,15 @@
 ''' Creo le mie funzoni per i miei template'''
 
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import UserRegisterForm
+from django.template.loader import get_template
+from django.template import Context
 import bcrypt
-import os
-from .models import Signup, Contact
-from .functions import *
+from .models import User, Contact
 
 
 # Create your views here.
@@ -30,8 +35,10 @@ def gitstatus(request):
 def login(request):
     return render(request, "login.html")
 
+#register function
 def register(request):
-
+    if request.method == "POST":
+        form = UserRegisterForm(request.POST)
     return render(request, "register.html")
 
 def logout(request):
