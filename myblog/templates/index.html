@@ -15,13 +15,13 @@
     <header>
         <ul class="main-nav">
             <li><a href="{% url 'index' %}">Home</a></li>
-            <li><div id="#about"><a href="{% url 'index' %}">About</a></div></li>
-            <li><a href="{% url 'index' %}">Contact</a></li>
+            <li><div id="#about"><a href="{% url 'about' %}">About</a></div></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
         </ul>
         <div class="dropdown">
-                <img src="myblog/static/images/userfoto.png" alt="userfoto"  width="40px" height="40px" /><nobr style="color: white"> {{  global_username }} </nobr>
+                <img src="{% static 'images/userfoto.png' %}" alt="userfoto"  width="40px" height="40px" /><nobr style="color: white"> {{  global_username }} </nobr>
             <ul class="drop-nav">
-                <li><a href="">Edit Account</a></li>
+                <li><a href="{% url 'info' %}">Edit Account</a></li>
                 {% block content %}
                     {% if  requirements %}
                       <script>
@@ -34,10 +34,10 @@
                       </script>
                     {% endif %}
                 {% endblock %}
-                <li><a href="{% url 'index' %}">Github Status</a></li>  
-                <li><a href="{% url 'index' %}">Log In</a></li>
-                <li><a href="{% url 'index' %}">Sign Up</a></li>
-                <li><a  href="{% url 'index' %}">Logout</a></li>
+                <li><a href="{% url 'gitstatus' %}">Github Status</a></li>  
+                <li><a href="{% url 'login' %}">Log In</a></li>
+                <li><a href="{% url 'register' %}">Sign Up</a></li>
+                <li><a  href="{% url 'logout' %}">Logout</a></li>
             </ul>
         </div>
       </header>
@@ -48,7 +48,7 @@
         <h1 class="animated-text">MY WEB APP</h1>
     </div>
     <div>
-        <img src="myblog/static/images/Pazancyk.JPG" alt="persona" id="myfoto">
+        <img src="{% static 'images/myfoto.png' %}" alt="persona" id="myfoto">
     </div>
     <footer>
         <p style="text-align: center; font-family: Arial, Helvetica, sans-serif;"><b>2023 Copyright© Ostap Fedchuk</b></p>
