@@ -8,20 +8,19 @@ from django.contrib.auth.forms import UserCreationForm
 '''
 
 class UserRegisterForm(UserCreationForm):
-    username = forms.CharField(max_length=30, primary_key=True)
+    username = forms.CharField(max_length=30)
     email = forms.EmailField(max_length=50)
     fullname = forms.CharField(max_length=100)
-    age = forms.DateField()
+    age = forms.CharField(max_length=20)
     gender = forms.CharField(max_length=10)
     password = forms.CharField(max_length= 50)
 
-    #Per fare in modo tale che ci siano due 'primary key' indipendenti
-    #visto che due primary key non ci possono stare
-    #oppure se sono due unique keys, saranno dipendenti un dall'altro
-    
+    '''
+       Ho creato due unique key per non fare in modo tale che 
+       username e email dipendano uno dall'altro(username+email)
+       quindi adesso è (username/email)
+    '''
+
     class Meta:
-        constraints = [
-            forms.UniqueConstraint(
-                fields=['email'], name='unique_email'
-            )
-        ]
+        model = User
+        fields = ['username', 'email', 'fullname', 'age', 'gender', 'password']

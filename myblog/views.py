@@ -32,14 +32,28 @@ def info(request):
 def gitstatus(request):
     return render(request, "gitstatus.html")
 
+############## login function ###############
 def login(request):
     return render(request, "login.html")
 
-#register function
+############## register function ###############
 def register(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
-    return render(request, "register.html")
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            fullname = form.cleaned_data.get('fullname')
+            age = form.cleaned_data.get('age')
+            gender = form.cleaned_data.get('gender')
+            password = form.cleaned_data.get('password')
+
+            messages.success(request, f'Your account has been creted')
+            return redirect('login')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'register.html', {'form': form})
 
 def logout(request):
     return render(request, "index.html")
