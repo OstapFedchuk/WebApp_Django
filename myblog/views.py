@@ -1,7 +1,11 @@
 ''' Creo le mie funzoni per i miei template'''
 
 from django.shortcuts import render, HttpResponse
+import bcrypt
+import os
 from .models import Signup, Contact
+from .functions import *
+
 
 # Create your views here.
 def index(request):
@@ -27,6 +31,7 @@ def login(request):
     return render(request, "login.html")
 
 def register(request):
+
     return render(request, "register.html")
 
 def logout(request):

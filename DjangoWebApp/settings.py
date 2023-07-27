@@ -86,6 +86,17 @@ DATABASES = {
     }
 }
 
+#serve per vari login e registrazioni
+DISABLE_USERNAME = False
+LOGIN_VIA_EMAIL = True
+LOGIN_VIA_EMAIL_OR_USERNAME = True
+LOGIN_REDIRECT = 'index'
+LOGIN_URL = 'myblog'
+USE_REMEMBER_ME = True
+
+RESTORE_PASSWORD_VIA_EMAIL_OR_USERNAME = False
+
+SIGN_UP_FIELDS = ['username', 'email', 'fullname', 'age', 'gender', 'password']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
