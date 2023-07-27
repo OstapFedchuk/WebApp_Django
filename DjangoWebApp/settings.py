@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'bootstrap5',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'myblog.apps.MyblogConfig', #need for include our app inside the project
     'django.contrib.admin',
     'django.contrib.auth', # authentication system
@@ -40,6 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.messages', # messaging framework.
     'django.contrib.staticfiles',  # framework for managing static files
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

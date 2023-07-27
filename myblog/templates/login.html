@@ -22,7 +22,7 @@
         <h2><b>LOG IN</b></h2>
     </div>
     <!-- Bootstrap 5 starter form -->
-    <form id="contactForm" method="POST" action="{% url 'index' %}">
+    <form id="contactForm" method="POST" action="{% url 'login' %}">
     <!-- Name or Email input -->
         {% block content %}
           {% if error %}
@@ -33,8 +33,8 @@
         {% endblock %}
         <br>
         <div class="mb-3">
-            <label class="form-label" for="username">User (Username or Email)</label>
-            <input class="form-control" id="name" type="text" placeholder="Name" name="username"/>
+            <label class="form-label" for="gen_user">User (Username or Email)</label>
+            <input class="form-control" id="name" type="text" placeholder="Name" name="gen_user"/>
         </div>
         
     <!-- Password input -->
