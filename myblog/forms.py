@@ -19,7 +19,7 @@ class UserRegisterForm(UserCreationForm):
     username = forms.CharField(label="Enter Username", max_length=30)
     email = forms.EmailField(label="Enter Email", max_length=50)
     fullname = forms.CharField(label="Enter Fullname", max_length=100)
-    age = forms.DateField(label="Enter your Age")
+    age = forms.DateField(label="Enter your BirthDay", widget=forms.DateInput(attrs=dict(type='date')))
     gender = forms.ChoiceField(label="Select Gender", choices=GENDER_CHOICES)
     password1 = forms.CharField(label="Enter Password", max_length= 50, widget=forms.PasswordInput)
     password2 = forms.CharField(label="ConfirmPassword", max_length=50,  widget=forms.PasswordInput)
@@ -32,3 +32,4 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'fullname', 'age', 'gender', 'password1', 'password2']
+

@@ -1,10 +1,20 @@
 ''' Creo le mie funzoni per i miei template'''
+from dotenv import load_dotenv
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
+from django.template.loader import get_template
+from django.template import Context
 
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 import bcrypt
-from .models import User, Contact
+from .models import *
+from .forms import *
 from .functions import *
+
 
 class CreatePerson(CreateView):
     model = UserRegisterForm
@@ -44,7 +54,7 @@ def login(request):
         user = authenticate(request, gen_user = gen_user, password = password)
         if user is not None:
             form = login(request,user)
-            return redirect('index', {'global_username': gen_user})
+            return redirect('index')
         else:
             error = True
             return redirect('login', {'error': error})
@@ -57,36 +67,43 @@ def register(request):
     req_psw = False
 
     if request.method == "POST":
-        form = UserRegisterForm(request.POST)
+        form_data = request.POST
+        #Purtroppo recupera solamente il form senza i dati 
+        form = UserRegisterForm(request.POST) 
         if form.is_valid():
-            not_hashed_psw = password1
+            #recupero dati dal UserRegistrationForm
+            username = form_data['username']
+            email = form_data['email']
+            fullname = form_data['fullname']
+            age = form_data['age']
+            gender = form_data['gender']
+            email = form_data['email']
+            password1 = form_data['password1']
+
             #procedimento per heshare la password
+            not_hashed_psw = password1
             password1 = password1.encode('utf-8')
             hashed_psw = bcrypt.hashpw(password1, bcrypt.gensalt())
-
-            if check_user_exist(username) or check_email_exist(email):
+            
+            '''
+                if check_user_exist(username,mysql) or check_email_exist(email,mysql):
                 error = True
                 return render(request, "register.html", {'error': error})
+            '''
             
-            if form.password1 == form.password2:
-                if requirements_pass(not_hashed_psw):
-                    register_user_to_db(username,email,fullname,age,gender,hashed_psw)
-                    
-                    form.save()
+            #Check della password, con Django non è necessario fare un controllo
+            #inutile per le password che metchano, lo fa in automatico
+            if requirements_pass(not_hashed_psw):
+                #salvo al db
+                register_user_to_db(username,email,fullname,age,gender,hashed_psw)
+                #salvo il form    
+                form.save()
+                form.full_clean()
 
-                    username = form.cleaned_data.get('username')
-                    email = form.cleaned_data.get('email')
-                    fullname = form.cleaned_data.get('fullname')
-                    age = form.cleaned_data.get('age')
-                    gender = form.cleaned_data.get('gender')
-                    password1 = form.cleaned_data.get('password1')
-                    password2 = form.cleaned_data.get('password2')
-
-                    messages.success(request, f'Your account has been creted')
-                    return redirect('login')
-                else:
-                    req_psw = True
-                    return render(request, "register.html", {'req_psw': req_psw})
+                return redirect('login')
+            else:
+                req_psw = True
+                return render(request, "register.html", {'req_psw': req_psw})
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
