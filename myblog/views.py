@@ -14,7 +14,7 @@ import bcrypt
 from .models import *
 from .forms import *
 from .functions import *
-
+from DjangoWebApp.settings import DATABASES
 
 class CreatePerson(CreateView):
     model = UserRegisterForm
@@ -94,11 +94,9 @@ def register(request):
             #Check della password, con Django non è necessario fare un controllo
             #inutile per le password che metchano, lo fa in automatico
             if requirements_pass(not_hashed_psw):
-                #salvo al db
-                register_user_to_db(username,email,fullname,age,gender,hashed_psw)
-                #salvo il form    
-                form.save()
-                form.full_clean()
+                #salvo il form  in DB  
+                model_instance =form.save(commit=False)
+                model_instance.save()
 
                 return redirect('login')
             else:
