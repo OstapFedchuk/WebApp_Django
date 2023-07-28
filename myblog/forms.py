@@ -24,11 +24,6 @@ class UserRegisterForm(UserCreationForm):
     password1 = forms.CharField(label="Enter Password", max_length= 50, widget=forms.PasswordInput)
     password2 = forms.CharField(label="ConfirmPassword", max_length=50,  widget=forms.PasswordInput)
 
-    '''
-       Ho creato due unique key per non fare in modo tale che 
-       username e email dipendano uno dall'altro(username+email)
-       quindi adesso è (username/email)
-    '''
     class Meta:
         model = User
         fields = ['username', 'email', 'fullname', 'age', 'gender', 'password1', 'password2']

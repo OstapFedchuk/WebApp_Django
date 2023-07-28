@@ -25,7 +25,7 @@ global_username = ""
 
 # Create your views here.
 def index(request):
-    if request.user.is_authenticated :
+    if request.user.is_authenticated:
         global_username = request.user.username
         return render(request, "index.html", {'global_username': global_username}) 
     else:
@@ -63,8 +63,8 @@ def login(request):
 
 ############## register function ###############
 def register(request):
-    error = False
-    req_psw = False
+    error = False # compare quando l'email è già in uso
+    req_psw = False #compare se non vengono soddisfatti i requisiti minimi
 
     if request.method == "POST":
         form_data = request.POST
@@ -85,23 +85,21 @@ def register(request):
             password1 = password1.encode('utf-8')
             hashed_psw = bcrypt.hashpw(password1, bcrypt.gensalt())
             
-            '''
-                if check_user_exist(username,mysql) or check_email_exist(email,mysql):
+            
+            if check_email_exist(email):
                 error = True
                 return render(request, "register.html", {'error': error})
-            '''
+            
             
             #Check della password, con Django non è necessario fare un controllo
             #inutile per le password che metchano, lo fa in automatico
             if requirements_pass(not_hashed_psw):
                 #salvo il form  in DB  
-                model_instance =form.save(commit=False)
-                model_instance.save()
-
+                form.save()
                 return redirect('login')
             else:
                 req_psw = True
-                return render(request, "register.html", {'req_psw': req_psw})
+                return render(request, "register.html", {'form': form, 'req_psw': req_psw})
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})

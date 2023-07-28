@@ -29,12 +29,10 @@
       {% csrf_token %}
       {{ form|crispy }}
 
-        {% if error %}
-            <div class="error">
-              <p>Username or Email is already taken!</p>
-            </div>
-          {% endif %}
-        <div class="d-grid">
+        {% if req_psw %}
+          <p id="req_psw" style="color: red;">Minimal requirements(Min. Lenght=8, 1 Digit, 1 Upercase, 1 Lowercase, 1 Special Character)</p>
+        {% endif %}
+        <div class="d-grid" >
             <button class="btn btn-primary btn-lg" type="submit">Sign Up</button>
         </div>
     </form>
