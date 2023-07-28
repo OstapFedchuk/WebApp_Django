@@ -25,7 +25,7 @@ global_username = ""
 
 # Create your views here.
 def index(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated :
         global_username = request.user.username
         return render(request, "index.html", {'global_username': global_username}) 
     else:
