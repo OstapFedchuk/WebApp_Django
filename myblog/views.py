@@ -86,7 +86,7 @@ def register(request):
             hashed_psw = bcrypt.hashpw(password1, bcrypt.gensalt())
             
             
-            if check_email_exist(email):
+            if User.objects.filter(username).exists() or User.objects.filter(email).exists():
                 error = True
                 return render(request, "register.html", {'error': error})
             
