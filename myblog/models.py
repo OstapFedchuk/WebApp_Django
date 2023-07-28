@@ -7,7 +7,7 @@ class User(models.Model):
     fullname = models.CharField(max_length=100)
     age = models.CharField(max_length=20)
     gender = models.CharField(max_length=10)
-    password = models.CharField(max_length= 50)
+    password1 = models.CharField(max_length= 50)
     
     '''Ho creato due unique key per non fare in modo tale che 
        username e email dipendano uno dall'altro(username+email)

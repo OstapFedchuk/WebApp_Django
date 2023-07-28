@@ -1,16 +1,15 @@
 ''' Creo le mie funzoni per i miei template'''
 
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
-from .forms import UserRegisterForm
-from django.template.loader import get_template
-from django.template import Context
+from django.views.generic import CreateView
 import bcrypt
 from .models import User, Contact
 from .functions import *
+
+class CreatePerson(CreateView):
+    model = UserRegisterForm
+    template_name = 'register.html'
+    fields = ['username', 'email', 'fullname', 'age', 'gender', 'password']
 
 global_username = ""
 
@@ -54,21 +53,40 @@ def login(request):
 
 ############## register function ###############
 def register(request):
+    error = False
+    req_psw = False
+
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            register_user_to_db(username,email,fullname,age,gender,password)
-            form.save()
+            not_hashed_psw = password1
+            #procedimento per heshare la password
+            password1 = password1.encode('utf-8')
+            hashed_psw = bcrypt.hashpw(password1, bcrypt.gensalt())
 
-            username = form.cleaned_data.get('username')
-            email = form.cleaned_data.get('email')
-            fullname = form.cleaned_data.get('fullname')
-            age = form.cleaned_data.get('age')
-            gender = form.cleaned_data.get('gender')
-            password = form.cleaned_data.get('password')
+            if check_user_exist(username) or check_email_exist(email):
+                error = True
+                return render(request, "register.html", {'error': error})
+            
+            if form.password1 == form.password2:
+                if requirements_pass(not_hashed_psw):
+                    register_user_to_db(username,email,fullname,age,gender,hashed_psw)
+                    
+                    form.save()
 
-            messages.success(request, f'Your account has been creted')
-            return redirect('index')
+                    username = form.cleaned_data.get('username')
+                    email = form.cleaned_data.get('email')
+                    fullname = form.cleaned_data.get('fullname')
+                    age = form.cleaned_data.get('age')
+                    gender = form.cleaned_data.get('gender')
+                    password1 = form.cleaned_data.get('password1')
+                    password2 = form.cleaned_data.get('password2')
+
+                    messages.success(request, f'Your account has been creted')
+                    return redirect('login')
+                else:
+                    req_psw = True
+                    return render(request, "register.html", {'req_psw': req_psw})
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
