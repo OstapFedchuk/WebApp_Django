@@ -28,4 +28,10 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'fullname', 'age', 'gender', 'password1', 'password2']
 
+class LoginForm(forms.Form):
+    gen_user = forms.CharField(label="Enter Username or Email", max_length=50)
+    password = forms.CharField(label="Enter Password", max_length=50, widget=forms.PasswordInput)
 
+    class Meta:
+        model = User
+        fields = ['gen_user', 'password']

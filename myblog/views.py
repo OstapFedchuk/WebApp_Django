@@ -25,8 +25,8 @@ global_username = ""
 
 # Create your views here.
 def index(request):
-    if request.user.myblog_user:
-        global_username = request.user.username
+    if request.user.is_authenticated:
+        global_username = request.user.is_authenticated
         return render(request, "index.html", {'global_username': global_username}) 
     else:
         global_username = "Guest"
@@ -69,7 +69,7 @@ def register(request):
     if request.method == "POST":
         form_data = request.POST
         #Purtroppo recupera solamente il form senza i dati 
-        form = UserRegisterForm(request.POST) 
+        form = UserRegisterForm(form_data) 
         if form.is_valid():
             #recupero dati dal UserRegistrationForm
             username = form_data['username']
@@ -85,17 +85,20 @@ def register(request):
             password1 = password1.encode('utf-8')
             hashed_psw = bcrypt.hashpw(password1, bcrypt.gensalt())
             
-            
-            if User.objects.filter(username).exists() or User.objects.filter(email).exists():
+            #controllo se il username o l'email sono già in uso
+            if User.objects.filter(username=username).exists():
                 error = True
-                return render(request, "register.html", {'error': error})
-            
-            
-            #Check della password, con Django non è necessario fare un controllo
-            #inutile per le password che metchano, lo fa in automatico
+                return render(request, "register.html", {"error": error, "form": form})
+
+            if User.objects.filter(email=email).exists():
+                error = True
+                return render(request, "register.html", {"error": error, "form": form})   
+                
+            #check se la password soddisfa i requisiti minimi
             if requirements_pass(not_hashed_psw):
-                #salvo il form  in DB  
-                form.save()
+                #procedimento di salvataggio dati nel DB
+                user = form.save(commit=False) #creo il user object senza salvarlo per ora
+                user.save() #salvo i dati
                 return redirect('login')
             else:
                 req_psw = True
@@ -104,6 +107,7 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
 
+####### logout function ########
 def logout(request):
     return render(request, "index.html")
 

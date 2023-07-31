@@ -3,17 +3,17 @@ from django.db import models
 # Create your models here.
 class User(models.Model):
     username = models.CharField(max_length=30, null=True, default='')
-    email = models.EmailField(max_length=50, null=False, default='', primary_key=True)
+    email = models.EmailField(max_length=50, null=False, default='')
     fullname = models.CharField(max_length=100, null=True, default='')
     age = models.CharField(max_length=20, null=True, default='')
     gender = models.CharField(max_length=10, null=True, default='')
     password = models.CharField(max_length= 50, null=True, default='')
-    
-    '''Ho creato due unique key per non fare in modo tale che 
-       username e email dipendano uno dall'altro(username+email)
-       quindi adesso è (username/email)
-    '''
 
+    class Meta:
+        db_table = 'database_mysql'
+        constraints = [
+            models.UniqueConstraint(fields=['email'], name='unique_email')
+        ]
 
 
 class Contact(models.Model):
