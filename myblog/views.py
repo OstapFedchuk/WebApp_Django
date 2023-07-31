@@ -14,7 +14,6 @@ import bcrypt
 from .models import *
 from .forms import *
 from .functions import *
-from DjangoWebApp.settings import DATABASES
 
 class CreatePerson(CreateView):
     model = UserRegisterForm
@@ -80,24 +79,22 @@ def register(request):
             email = form_data['email']
             password1 = form_data['password1']
 
-            #procedimento per heshare la password
+             #procedimento per heshare la password
             not_hashed_psw = password1
             password1 = password1.encode('utf-8')
             hashed_psw = bcrypt.hashpw(password1, bcrypt.gensalt())
-            
-            #controllo se il username o l'email sono già in uso
-            if User.objects.filter(username=username).exists():
-                error = True
-                return render(request, "register.html", {"error": error, "form": form})
 
+            #controllo se l'email è già in uso
             if User.objects.filter(email=email).exists():
                 error = True
                 return render(request, "register.html", {"error": error, "form": form})   
                 
+            #creo l'oggetto che verrà mandato alla tabella del DB durante il save
+            data_to_mysql = User.objects.create(username=username, email=email, fullname=fullname, age=age, gender=gender, password=hashed_psw)
             #check se la password soddisfa i requisiti minimi
             if requirements_pass(not_hashed_psw):
                 #procedimento di salvataggio dati nel DB
-                form.save()
+                form.save(data_to_mysql)
                 return redirect('login')
             else:
                 req_psw = True
