@@ -97,8 +97,7 @@ def register(request):
             #check se la password soddisfa i requisiti minimi
             if requirements_pass(not_hashed_psw):
                 #procedimento di salvataggio dati nel DB
-                user = form.save(commit=False) #creo il user object senza salvarlo per ora
-                user.save() #salvo i dati
+                form.save()
                 return redirect('login')
             else:
                 req_psw = True
