@@ -34,13 +34,18 @@ def about(request):
 
 def contact(request):
 
-    form_data = request.POST
-    form = ContactForm(form_data)
+    
     if request.method == 'POST':
-        name = form_data['name']
-        email = form_data['email']
-        subject = form_data['subject']
-        message = form_data['message']
+        form_data = request.POST
+        form = ContactForm(form_data)
+        if form.is_valid():
+            name = form_data['name']
+            email = form_data['email']
+            subject = form_data['subject']
+            message = form_data['message']
+
+            data_contact_mysql = User.objects.create(name=name, email=email, subject=subject, message=message)
+            form.save(data_contact_mysql)
 
     return render(request, "contact.html")
 
