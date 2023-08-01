@@ -24,12 +24,11 @@ global_username = ""
 
 # Create your views here.
 def index(request):
-    if request.user.is_authenticated:
-        global_username = request.user.is_authenticated
-        return render(request, "index.html", {'global_username': global_username}) 
+    if 'username' in request.session:
+       return render(request, 'index.html', {'global_username': request.session['username']})
     else:
-        global_username = "Guest"
-        return render(request, "index.html", {'global_username': global_username})
+        username = "Guest"
+        return render(request, 'index.html', {'global_username': username})
 
 def about(request):
     return render(request, "about.html")
@@ -46,18 +45,24 @@ def gitstatus(request):
 ############## login function ###############
 def login(request):
     error = False
-
+    
+    form_data = request.POST
+    form = LoginForm(form_data) 
     if request.method == 'POST':
-        gen_user =  request.POST['gen_user']
-        password = request.POST['password']
-        user = authenticate(request, gen_user = gen_user, password = password)
-        if user is not None:
-            form = login(request,user)
-            return redirect('index')
+        gen_user =  form_data['gen_user']
+        password_form = form_data['password']
+        
+        if User.objects.filter(username=gen_user).exists() or User.objects.filter(email=gen_user).exists():
+            query_set = User.objects.get(username=gen_user)
+            pass_db = query_set.first()['password']
+            decode_pass = pass_db.decode('utf-8')
+            if password_form == decode_pass:
+                request.session['logged_in'] = True
+                request.session['username'] = query_set
         else:
             error = True
-            return redirect('login', {'error': error})
-    form = AuthenticationForm()
+            return render(request, 'login.html', {'error': error})
+    form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
 ############## register function ###############
@@ -89,13 +94,14 @@ def register(request):
                 error = True
                 return render(request, "register.html", {"error": error, "form": form})   
                 
-            #creo l'oggetto che verrà mandato alla tabella del DB durante il save
-            data_to_mysql = User.objects.create(username=username, email=email, fullname=fullname, age=age, gender=gender, password=hashed_psw)
             #check se la password soddisfa i requisiti minimi
             if requirements_pass(not_hashed_psw):
+                #creo l'oggetto che verrà mandato alla tabella del DB durante il save
+                data_to_mysql = User.objects.create(username=username, email=email, fullname=fullname, age=age, gender=gender, password=hashed_psw)
                 #procedimento di salvataggio dati nel DB
                 form.save(data_to_mysql)
                 return redirect('login')
+            #DA CAPIRE PERCHE SALVA LA PASSWORD
             else:
                 req_psw = True
                 return render(request, "register.html", {'form': form, 'req_psw': req_psw})
