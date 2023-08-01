@@ -76,15 +76,6 @@ def insert_rec_psw(User,password,mysql):
     cur.execute("UPDATE myblog_user SET password=%s WHERE username=%s OR email=%s", (password,User,User))
     cur.close()
 
-#funzione che va a recuperare la password heshed dal DB
-def retrieve_password(User,mysql):
-    cur = mysql.get_db().cursor()
-    #inserendo il username dell'utente andiamo a recuperare la passsword dal DB
-    cur.execute("SELECT password FROM myblog_user WHERE username=%s OR email=%s", (User,User))
-    
-    result = cur.fetchone()
-    return result[0]   
-
 #ritorno tutti i dati dell'utente
 def retrieve_all(username,mysql):
     cur = mysql.get_db().cursor()

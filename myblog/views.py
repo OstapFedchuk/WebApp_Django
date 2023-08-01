@@ -33,6 +33,15 @@ def about(request):
     return render(request, "about.html")
 
 def contact(request):
+
+    form_data = request.POST
+    form = ContactForm(form_data)
+    if request.method == 'POST':
+        name = form_data['name']
+        email = form_data['email']
+        subject = form_data['subject']
+        message = form_data['message']
+
     return render(request, "contact.html")
 
 def info(request):
@@ -51,15 +60,17 @@ def login(request):
         gen_user =  form_data['gen_user']
         password_form = form_data['password']
         
-        #controllo se username o email esistono
+        #controllo se username o email esistono(Se mi loggo con l'email verrò visualizzato il Username)
         if User.objects.filter(username=gen_user).exists() or User.objects.filter(email=gen_user).exists():
             query_set = User.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
             pass_db = query_set.first()['password'] #ricavo dalla riga la password
             decode_pass = pass_db.decode('utf-8') # la decodo
+            
             #controllo se le password corrispondano
             if password_form == decode_pass: 
                 #metto in sessione l'Utente
-                request.session['username'] = query_set
+                request.session['username'] = gen_user
+                return redirect('index')
         #Altrimenti, errore, credenziali sbagliati
         else:
             error = True
