@@ -27,8 +27,7 @@ def index(request):
     if 'username' in request.session:
        return render(request, 'index.html', {'global_username': request.session['username']})
     else:
-        username = "Guest"
-        return render(request, 'index.html', {'global_username': username})
+        return render(request, 'index.html', {'global_username': "Guest"})
 
 def about(request):
     return render(request, "about.html")
@@ -52,13 +51,16 @@ def login(request):
         gen_user =  form_data['gen_user']
         password_form = form_data['password']
         
+        #controllo se username o email esistono
         if User.objects.filter(username=gen_user).exists() or User.objects.filter(email=gen_user).exists():
-            query_set = User.objects.get(username=gen_user)
-            pass_db = query_set.first()['password']
-            decode_pass = pass_db.decode('utf-8')
-            if password_form == decode_pass:
-                request.session['logged_in'] = True
+            query_set = User.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
+            pass_db = query_set.first()['password'] #ricavo dalla riga la password
+            decode_pass = pass_db.decode('utf-8') # la decodo
+            #controllo se le password corrispondano
+            if password_form == decode_pass: 
+                #metto in sessione l'Utente
                 request.session['username'] = query_set
+        #Altrimenti, errore, credenziali sbagliati
         else:
             error = True
             return render(request, 'login.html', {'error': error})
