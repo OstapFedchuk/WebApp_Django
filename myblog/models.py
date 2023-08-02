@@ -1,15 +1,19 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth import get_user_model
+
 
 # Create your models here.
-class UserData(AbstractUser):
+User = get_user_model()
+class UserData(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=30, default="")
-    email = models.EmailField(max_length=50, default="", unique=True)
+    username = models.CharField(User, max_length=30, default="")
+    email = models.EmailField(max_length=50, default="")
     fullname = models.CharField(max_length=100, default="")
     age = models.CharField(max_length=20, default="")
     gender = models.CharField(max_length=20, default="")
     password = models.CharField(max_length= 500, default="")
+
 
     class Meta:
         db_table = 'myblog_user'

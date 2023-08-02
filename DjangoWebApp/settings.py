@@ -141,4 +141,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #diezione dei file statici
 STATICFILES_DIR = [BASE_DIR / "static"]
 
-AUTH_USER_MODEL = 'myblog.UserData'
+#AUTH_USER_MODEL = 'myblog.UserData'
