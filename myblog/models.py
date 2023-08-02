@@ -21,7 +21,13 @@ class User(models.Model):
 
 
 class Contact(models.Model):
-    name = models.CharField(max_length=50)
-    email = models.EmailField(max_length=50)
-    subject = models.CharField(max_length=100)
-    message = models.TextField(max_length=2000)
+    name = models.CharField(max_length=50, default='')
+    email = models.EmailField(max_length=50, default='')
+    subject = models.CharField(max_length=100, default='')
+    message = models.TextField(max_length=2000, default='')
+
+    class Meta:
+        db_table = 'myblog_contact'
+
+    def __str__(self):
+        return self.name

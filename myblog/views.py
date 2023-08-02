@@ -34,7 +34,6 @@ def about(request):
 
 def contact(request):
 
-    
     if request.method == 'POST':
         form_data = request.POST
         form = ContactForm(form_data)
@@ -47,7 +46,8 @@ def contact(request):
             data_contact_mysql = User.objects.create(name=name, email=email, subject=subject, message=message)
             form.save(data_contact_mysql)
 
-    return render(request, "contact.html")
+    form = ContactForm()
+    return render(request, "contact.html", {'form': form})
 
 def info(request):
     return render(request, "info.html")
@@ -59,27 +59,28 @@ def gitstatus(request):
 def login(request):
     error = False
     
-    form_data = request.POST
-    form = LoginForm(form_data) 
     if request.method == 'POST':
-        gen_user =  form_data['gen_user']
-        password_form = form_data['password']
-        
-        #controllo se username o email esistono(Se mi loggo con l'email verrò visualizzato il Username)
-        if User.objects.filter(username=gen_user).exists() or User.objects.filter(email=gen_user).exists():
-            query_set = User.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
-            pass_db = query_set.first()['password'] #ricavo dalla riga la password
-            decode_pass = pass_db.decode('utf-8') # la decodo
+        form_data = request.POST
+        form = LoginForm(form_data) 
+        if form.is_valid():
+            gen_user =  form_data['gen_user']
+            password_form = form_data['password']
             
-            #controllo se le password corrispondano
-            if password_form == decode_pass: 
-                #metto in sessione l'Utente
-                request.session['username'] = gen_user
-                return redirect('index')
-        #Altrimenti, errore, credenziali sbagliati
-        else:
-            error = True
-            return render(request, 'login.html', {'error': error})
+            #controllo se username o email esistono(Se mi loggo con l'email verrò visualizzato il Username)
+            if User.objects.filter(username=gen_user).exists() or User.objects.filter(email=gen_user).exists():
+                query_set = User.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
+                pass_db = query_set.first()['password'] #ricavo dalla riga la password
+                decode_pass = pass_db.decode('utf-8') # la decodo
+                
+                #controllo se le password corrispondano
+                if password_form == decode_pass: 
+                    #metto in sessione l'Utente
+                    request.session['username'] = gen_user
+                    return redirect('index')
+            #Altrimenti, errore, credenziali sbagliati
+            else:
+                error = True
+                return render(request, 'login.html', {'error': error})
     form = LoginForm()
     return render(request, 'login.html', {'form': form})
 

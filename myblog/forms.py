@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import User
 from django.contrib.auth.forms import UserCreationForm
+from .models import *
 
 
 ''' Questo file serve per la gestione dei form all'interno del WebApp.
@@ -40,3 +41,7 @@ class ContactForm(forms.Form):
     email = forms.EmailField(label='Your Email',max_length=50, required=True)
     subject = forms.CharField(label='Subject',max_length=100, required=True)
     message = forms.CharField(label='The Message',widget=forms.Textarea, required=True)
+
+    class Meta:
+        model = Contact
+        fields = ['name', 'email', 'subject', 'message']

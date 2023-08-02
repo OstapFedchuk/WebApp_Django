@@ -41,20 +41,9 @@
             <!-- Bootstrap 5 starter form -->
             <form id="contactForm" method="POST" action="{% url 'contact' %}">
                 {% csrf_token %}
-                {{ form|crispy}}
-                {% if  requirements %}
-                    <script>
-                        function myFunction() {
-                            alert("All forms are required!");
-                        }
-
-                        myFunction();
-                    </script>
-                {% endif %}
-                
-                      
+                {{ form|crispy }}                 
                 <div class="d-grid">
-                    <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+                    <button class="btn btn-primary btn-lg" type="submit">Send it</button>
                 </div>
             </form>
         </div>
