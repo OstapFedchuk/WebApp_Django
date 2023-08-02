@@ -46,9 +46,8 @@ def contact(request):
             email = form_data['email']
             subject = form_data['subject']
             message = form_data['message']
-
-            contact_mysql = Contact.objects.create(name=name, email=email, subject=subject, message=message)
-            form.save(contact_mysql)
+            
+            form.save()
             return redirect('index')
     else:
         form = ContactForm()
@@ -127,7 +126,7 @@ def register(request):
                 #procedimento di salvataggio dati nel DB
                 form.save(data_to_mysql)
                 return redirect('login')
-            #DA CAPIRE PERCHE SALVA LA PASSWORD
+            #DA CAPIRE PERCHE SALVA LA PASSWORD e da il messaggio di errore
             else:
                 req_psw = True
                 return render(request, "register.html", {'form': form, 'req_psw': req_psw})
