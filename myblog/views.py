@@ -30,8 +30,12 @@ def index(request):
         return render(request, 'index.html', {'global_username': "Guest"})
 
 def about(request):
-    return render(request, "about.html")
+    if 'username' in request.session:
+       return render(request, 'about.html', {'global_username': request.session['username']})
+    else:
+        return render(request, 'about.html', {'global_username': "Guest"})
 
+####### contact function #######
 def contact(request):
 
     if request.method == 'POST':
@@ -43,10 +47,11 @@ def contact(request):
             subject = form_data['subject']
             message = form_data['message']
 
-            data_contact_mysql = User.objects.create(name=name, email=email, subject=subject, message=message)
-            form.save(data_contact_mysql)
-
-    form = ContactForm()
+            contact_mysql = Contact.objects.create(name=name, email=email, subject=subject, message=message)
+            form.save(contact_mysql)
+            return redirect('index')
+    else:
+        form = ContactForm()
     return render(request, "contact.html", {'form': form})
 
 def info(request):
@@ -67,8 +72,8 @@ def login(request):
             password_form = form_data['password']
             
             #controllo se username o email esistono(Se mi loggo con l'email verrò visualizzato il Username)
-            if User.objects.filter(username=gen_user).exists() or User.objects.filter(email=gen_user).exists():
-                query_set = User.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
+            if UserData.objects.filter(username=gen_user).exists() or UserData.objects.filter(email=gen_user).exists():
+                query_set = UserData.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
                 pass_db = query_set.first()['password'] #ricavo dalla riga la password
                 decode_pass = pass_db.decode('utf-8') # la decodo
                 
@@ -81,7 +86,8 @@ def login(request):
             else:
                 error = True
                 return render(request, 'login.html', {'error': error})
-    form = LoginForm()
+    else:
+        form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
 ############## register function ###############
@@ -102,21 +108,22 @@ def register(request):
             gender = form_data['gender']
             email = form_data['email']
             password1 = form_data['password1']
+            password2 = form_data['password2']
 
-             #procedimento per heshare la password
+            #procedimento per heshare la password
             not_hashed_psw = password1
             password1 = password1.encode('utf-8')
             hashed_psw = bcrypt.hashpw(password1, bcrypt.gensalt())
 
             #controllo se l'email è già in uso
-            if User.objects.filter(email=email).exists():
+            if UserData.objects.filter(email=email).exists():
                 error = True
                 return render(request, "register.html", {"error": error, "form": form})   
                 
             #check se la password soddisfa i requisiti minimi
             if requirements_pass(not_hashed_psw):
                 #creo l'oggetto che verrà mandato alla tabella del DB durante il save
-                data_to_mysql = User.objects.create(username=username, email=email, fullname=fullname, age=age, gender=gender, password=hashed_psw)
+                data_to_mysql = UserData.objects.create(username=username, email=email, fullname=fullname, age=age, gender=gender, password=hashed_psw)
                 #procedimento di salvataggio dati nel DB
                 form.save(data_to_mysql)
                 return redirect('login')

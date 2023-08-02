@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class User(models.Model):
+class UserData(models.Model):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=30, default="")
     email = models.EmailField(max_length=50, default="")
@@ -10,6 +10,8 @@ class User(models.Model):
     gender = models.CharField(max_length=20, default="")
     password = models.CharField(max_length= 500, default="")
 
+    USERNAME_FIELD = 'username'
+
     class Meta:
         db_table = 'myblog_user'
         constraints = [
@@ -17,7 +19,7 @@ class User(models.Model):
         ]
     
     def __str__(self):
-        return self.username, self.email, self.password
+        return self.username
 
 
 class Contact(models.Model):
@@ -28,6 +30,3 @@ class Contact(models.Model):
 
     class Meta:
         db_table = 'myblog_contact'
-
-    def __str__(self):
-        return self.name

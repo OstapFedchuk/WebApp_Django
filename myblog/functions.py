@@ -11,7 +11,7 @@ from .forms import UserRegisterForm
 from django.template.loader import get_template
 from django.template import Context
 import bcrypt
-from .models import User, Contact
+from .models import *
 
 
 #funzione che controlla se la password ha raggiunto i requisiti minimi per essere sicuri

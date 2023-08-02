@@ -24,19 +24,18 @@ class UserRegisterForm(UserCreationForm):
     password1 = forms.CharField(label="Enter Password", max_length= 50, widget=forms.PasswordInput, required=True)
     password2 = forms.CharField(label="ConfirmPassword", max_length=50,  widget=forms.PasswordInput, required=True)
     class Meta:
-        model = User
+        model = UserData
         fields = ['username', 'email', 'fullname', 'age', 'gender', 'password1', 'password2']
 
 
-class LoginForm(forms.Form):
+class LoginForm(forms.ModelForm):
     gen_user = forms.CharField(label="Enter Username or Email", max_length=50, required=True)
     password = forms.CharField(label="Enter Password", max_length=50, widget=forms.PasswordInput, required=True)
-
     class Meta:
-        model = User
+        model = UserData
         fields = ['gen_user', 'password']
 
-class ContactForm(forms.Form):
+class ContactForm(forms.ModelForm):
     name = forms.CharField(label='Your Name', max_length=50, required=True)
     email = forms.EmailField(label='Your Email',max_length=50, required=True)
     subject = forms.CharField(label='Subject',max_length=100, required=True)

@@ -41,7 +41,17 @@
             <!-- Bootstrap 5 starter form -->
             <form id="contactForm" method="POST" action="{% url 'contact' %}">
                 {% csrf_token %}
-                {{ form|crispy }}                 
+                {{ form|crispy }}  
+                {% if success %}
+                    <script>
+                        function myfunction() {
+                            alert("Message sent successfully!");
+                            window.location = 'http://127.0.0.1:8000/myblog/home'
+                        }
+
+                        myfunction();
+                    </script>
+                {% endif %}              
                 <div class="d-grid">
                     <button class="btn btn-primary btn-lg" type="submit">Send it</button>
                 </div>
