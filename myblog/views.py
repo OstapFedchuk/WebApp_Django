@@ -37,7 +37,11 @@ def about(request):
 
 ####### contact function #######
 def contact(request):
-
+    #serve per mostrare il username vicino all'icona del user, se è loggato
+    if 'username' in request.session:
+        return render(request, 'index.html', {'global_username': request.session['username']})
+    
+    #Procedimento di salvataggio dei dati nel myblog_contact
     if request.method == 'POST':
         form_data = request.POST
         form = ContactForm(form_data)
@@ -49,12 +53,20 @@ def contact(request):
             
             form.save()
             return redirect('index')
+        
+        #se l'utente non è loggato allora sarà Guest
+        else:
+            return render(request, 'index.html', {'global_username': "Guest"})
     else:
         form = ContactForm()
     return render(request, "contact.html", {'form': form})
 
+
 def info(request):
-    return render(request, "info.html")
+    if 'username' in request.session:
+       return render(request, 'info.html', {'global_username': request.session['username']})
+    else:
+        return render(request, 'info.html', {'global_username': "Guest"})
 
 def gitstatus(request):
     return render(request, "gitstatus.html")
@@ -72,14 +84,16 @@ def login(request):
             
             #controllo se username o email esistono(Se mi loggo con l'email verrò visualizzato il Username)
             if UserData.objects.filter(username=gen_user).exists() or UserData.objects.filter(email=gen_user).exists():
-                query_set = UserData.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
-                pass_db = query_set.first()['password'] #ricavo dalla riga la password
+                query_set = UserData.objects.values_list('username', flat=True)
+                pass_db = UserData.objects.values_list('password', flat=True)
+                #query_set = UserData.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
+                #pass_db = query_set.first()['password'] #ricavo dalla riga la password
                 decode_pass = pass_db.decode('utf-8') # la decodo
                 
                 #controllo se le password corrispondano
                 if password_form == decode_pass: 
                     #metto in sessione l'Utente
-                    request.session['username'] = gen_user
+                    request.session['username'] = query_set
                     return redirect('index')
             #Altrimenti, errore, credenziali sbagliati
             else:

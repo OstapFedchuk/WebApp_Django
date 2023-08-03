@@ -3,8 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, AbstractUser, BaseUserM
 
 # Create your models here.
 class UserData(AbstractBaseUser):
-    id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=45, default="", unique=True)
+    username = models.CharField(max_length=45, default="", primary_key=True)
     email = models.EmailField(max_length=45, default="")
     fullname = models.CharField(max_length=100, default="")
     age = models.CharField(max_length=20, default="")
