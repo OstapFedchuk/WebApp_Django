@@ -24,7 +24,6 @@ class UserRegisterForm(UserCreationForm):
     password1 = forms.CharField(label="Enter Password", max_length= 50, widget=forms.PasswordInput, required=True)
     password2 = forms.CharField(label="ConfirmPassword", max_length=50,  widget=forms.PasswordInput, required=True)
     
-    REQUIRED_FIELDS = ('username', 'email', 'fullname', 'age', 'gender', 'password1', 'password2')
     class Meta:
         model = UserData
         fields = ['username', 'email', 'fullname', 'age', 'gender', 'password1', 'password2']
