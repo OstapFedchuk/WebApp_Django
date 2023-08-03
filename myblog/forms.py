@@ -45,3 +45,11 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ['name', 'email', 'subject', 'message']
+
+
+class RecoveryForm(forms.ModelForm):
+    gen_user = forms.CharField(label="Enter Username or Email", max_length=60, required=True)
+
+    class Meta:
+        model = UserData
+        fields = ['gen_user']

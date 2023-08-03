@@ -152,5 +152,17 @@ def register(request):
 def logout(request):
     return render(request, "index.html")
 
+####### Recovery Password function ########
 def recovery(request):
+    if request.method == "POST":
+        form_data = request.POST
+        #Purtroppo recupera solamente il form senza i dati 
+        form = RecoveryForm(form_data) 
+        if form.is_valid():
+            gen_user = form_data['gen_user']
+
+    else:
+        form = RecoveryForm()
+        return render(request,  'recovery.html', {'form': form})
+
     return render(request, "recovery.html")
