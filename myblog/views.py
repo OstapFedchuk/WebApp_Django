@@ -126,7 +126,7 @@ def register(request):
             email = form_data['email']
             password1 = form_data['password1']
             password2 = form_data['password2']
- 
+    
             #controllo se l'email è già in uso
             if UserData.objects.filter(email=email).exists():
                 error = True
