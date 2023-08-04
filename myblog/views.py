@@ -145,7 +145,6 @@ def register(request):
                 #procedimento di salvataggio dati nel DB
                 form.save(data_to_mysql)
                 return redirect('login')
-            #DA CAPIRE PERCHE SALVA LA PASSWORD e da il messaggio di errore
             else:
                 req_psw = True
                 return render(request, "register.html", {'form': form, 'req_psw': req_psw})
