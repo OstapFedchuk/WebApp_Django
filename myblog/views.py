@@ -88,14 +88,13 @@ def login(request):
                 #pass_db = UserData.objects.values_list('password', flat=True)
                 query_set = UserData.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
                 pass_db = query_set.password
-                pass_db_decoded = pass_db.decode('utf8')
                 print(pass_db) #ricavo dalla riga la password
                 
                 #decode_pass = pass_db.decode('utf-8') # la decodo
                 
                 #controllo se le password corrispondano
                 #if password_form == decode_pass: 
-                if bcrypt.checkpw(password_form.encode('utf-8'), pass_db_decoded.encode('utf-8')):
+                if bcrypt.checkpw(password_form.encode('utf-8'), pass_db.encode('utf-8')):
                     #metto in sessione l'Utente
                     request.session['username'] = query_set
                     return redirect('index')
