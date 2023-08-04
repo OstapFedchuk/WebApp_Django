@@ -13,7 +13,6 @@ from django.template import Context
 import bcrypt
 from .models import *
 
-
 #funzione che controlla se la password ha raggiunto i requisiti minimi per essere sicuri
 def requirements_pass(NewPassword):
 

@@ -94,7 +94,7 @@ def login(request):
                 
                 #controllo se le password corrispondano
                 #if password_form == decode_pass: 
-                if bcrypt.checkpw(password_form.encode('utf-8'), pass_db.encode('utf-8')):
+                if bcrypt.checkpw(password_form.encode('utf-8'), pass_db .encode('utf-8')):
                     #metto in sessione l'Utente
                     request.session['username'] = query_set
                     return redirect('index')
@@ -157,13 +157,33 @@ def logout(request):
 
 ####### Recovery Password function ########
 def recovery(request):
+    error = False
+
     if request.method == "POST":
         form_data = request.POST
         #Purtroppo recupera solamente il form senza i dati 
         form = RecoveryForm(form_data) 
         if form.is_valid():
             gen_user = form_data['gen_user']
-
+            
+            if UserData.objects.filter(username=gen_user).exists() or UserData.objects.filter(email=gen_user).exists():
+                #genero la password temporanea senza encoddarla
+                clear_psw = password_generator()
+                #encoddo la password generata
+                rec_psw = clear_psw.encode('utf-8')
+                #hesho la password encoddata
+                hashed_rec_psw = bcrypt.hashpw(rec_psw, bcrypt.gensalt())
+                #recupero la password dal DB
+                x = UserData.objects.all()[6]
+                #settola nuova password generata
+                x.password = hashed_rec_psw
+                #salvo nel DB
+                x.save()
+                
+                return render(request, 'recovery.html', {'rec_psw': clear_psw, 'form': form})
+            else:
+                error = True
+                return render(request, 'recovery.html', {'error': error})
     else:
         form = RecoveryForm()
         return render(request,  'recovery.html', {'form': form})
