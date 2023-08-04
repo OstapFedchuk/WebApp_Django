@@ -84,14 +84,18 @@ def login(request):
             
             #controllo se username o email esistono(Se mi loggo con l'email verrò visualizzato il Username)
             if UserData.objects.filter(username=gen_user).exists() or UserData.objects.filter(email=gen_user).exists():
-                query_set = UserData.objects.values_list('username', flat=True)
-                pass_db = UserData.objects.values_list('password', flat=True)
-                #query_set = UserData.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
-                #pass_db = query_set.first()['password'] #ricavo dalla riga la password
-                decode_pass = pass_db.decode('utf-8') # la decodo
+                #query_set = UserData.objects.values_list('username', flat=True)
+                #pass_db = UserData.objects.values_list('password', flat=True)
+                query_set = UserData.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
+                pass_db = query_set.password
+                pass_db_decoded = pass_db.decode('utf8')
+                print(pass_db) #ricavo dalla riga la password
+                
+                #decode_pass = pass_db.decode('utf-8') # la decodo
                 
                 #controllo se le password corrispondano
-                if password_form == decode_pass: 
+                #if password_form == decode_pass: 
+                if bcrypt.checkpw(password_form.encode('utf-8'), pass_db_decoded.encode('utf-8')):
                     #metto in sessione l'Utente
                     request.session['username'] = query_set
                     return redirect('index')
@@ -123,20 +127,21 @@ def register(request):
             password1 = form_data['password1']
             password2 = form_data['password2']
 
-            #procedimento per heshare la password
-            not_hashed_psw = password1
-            password1 = password1.encode('utf-8')
-            hashed_psw = bcrypt.hashpw(password1, bcrypt.gensalt())
-
             #controllo se l'email è già in uso
             if UserData.objects.filter(email=email).exists():
                 error = True
                 return render(request, "register.html", {"error": error, "form": form})   
                 
             #check se la password soddisfa i requisiti minimi
-            if requirements_pass(not_hashed_psw):
+            if requirements_pass(password1):
+                #procedimento per heshare la password
+                not_hashed_psw = password1
+                password1 = password1.encode('utf-8')
+                hashed_psw = bcrypt.hashpw(password1, bcrypt.gensalt())
+                stored_password = hashed_psw.decode('utf-8')
+
                 #creo l'oggetto che verrà mandato alla tabella del DB durante il save
-                data_to_mysql = UserData.objects.create(username=username, email=email, fullname=fullname, age=age, gender=gender, password=hashed_psw)
+                data_to_mysql = UserData.objects.create(username=username, email=email, fullname=fullname, age=age, gender=gender, password=stored_password)
                 #procedimento di salvataggio dati nel DB
                 form.save(data_to_mysql)
                 return redirect('login')
