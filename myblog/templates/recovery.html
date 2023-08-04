@@ -26,9 +26,7 @@
           {% csrf_token %}
           {{ form|crispy}}
           {% if error %}
-              <div id="error">
-                <p>User not found!</p>
-              </div>
+              <p style="color: red; width: 100%; margin-top: .25rem; font-size: .875em;">User not found!</p>
             {% endif %}
           <br>
             <div class="d-grid">

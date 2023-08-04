@@ -84,19 +84,13 @@ def login(request):
             
             #controllo se username o email esistono(Se mi loggo con l'email verrò visualizzato il Username)
             if UserData.objects.filter(username=gen_user).exists() or UserData.objects.filter(email=gen_user).exists():
-                #query_set = UserData.objects.values_list('username', flat=True)
-                #pass_db = UserData.objects.values_list('password', flat=True)
-                query_set = UserData.objects.get(username=gen_user) #prendo tutta la riga dal DB coi dati
-                pass_db = query_set.password
-                print(pass_db) #ricavo dalla riga la password
-                
-                #decode_pass = pass_db.decode('utf-8') # la decodo
-                
+                pass_db = UserData.objects.values_list('password', flat=True)
+                print(pass_db)
                 #controllo se le password corrispondano
                 #if password_form == decode_pass: 
-                if bcrypt.checkpw(password_form.encode('utf-8'), pass_db .encode('utf-8')):
+                if bcrypt.checkpw(password_form.encode('utf-8'), pass_db.encode('utf-8')):
                     #metto in sessione l'Utente
-                    request.session['username'] = query_set
+                    request.session['username'] = gen_user
                     return redirect('index')
             #Altrimenti, errore, credenziali sbagliati
             else:
@@ -134,9 +128,8 @@ def register(request):
             #check se la password soddisfa i requisiti minimi
             if requirements_pass(password1):
                 #procedimento per heshare la password
-                not_hashed_psw = password1
-                password1 = password1.encode('utf-8')
-                hashed_psw = bcrypt.hashpw(password1, bcrypt.gensalt())
+                password_encode = password1.encode('utf-8')
+                hashed_psw = bcrypt.hashpw(password_encode, bcrypt.gensalt())
                 stored_password = hashed_psw.decode('utf-8')
 
                 #creo l'oggetto che verrà mandato alla tabella del DB durante il save
@@ -166,6 +159,7 @@ def recovery(request):
         if form.is_valid():
             gen_user = form_data['gen_user']
             
+            #Do la possibilità di recuperare la password consocendo username o email
             if UserData.objects.filter(username=gen_user).exists() or UserData.objects.filter(email=gen_user).exists():
                 #genero la password temporanea senza encoddarla
                 clear_psw = password_generator()
@@ -181,9 +175,10 @@ def recovery(request):
                 x.save()
                 
                 return render(request, 'recovery.html', {'rec_psw': clear_psw, 'form': form})
+            #se l'utente non esiste allora torna un errore
             else:
                 error = True
-                return render(request, 'recovery.html', {'error': error})
+                return render(request, 'recovery.html', {'error': error, 'form': form})
     else:
         form = RecoveryForm()
         return render(request,  'recovery.html', {'form': form})
